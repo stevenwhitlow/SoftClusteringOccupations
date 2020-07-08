@@ -1,7 +1,6 @@
 library(readxl)
 library(tidyverse)
 library(mixedMem)
-library(plyr)
 
 Abilities <- read_excel("Downloads/Abilities.xlsx")
 Abilities <- subset(Abilities, `Scale ID`=="IM")
@@ -17,12 +16,7 @@ Activities <- read_excel("Downloads/Work Activities.xlsx")
 Activities <- subset(Activities, `Scale ID`=="IM")
 Activities <- Activities[, names(Activities) %in% keep, drop = F]
 
-Knowledge <- read_excel("Downloads/Knowledge.xlsx")
-Knowledge <- subset(Knowledge, `Scale ID`=="IM")
-Knowledge <- Knowledge[, names(Knowledge) %in% keep, drop = F]
-Knowledge$`Element Name` <- revalue(Knowledge$`Element Name`, c("Mathematics"="Mathematics knowledge"))
-
-tasks <- bind_rows(Abilities, Skills, Activities, Knowledge)
+tasks <- bind_rows(Abilities, Skills, Activities)
 #tasks <- tasks %>% mutate(`Data Value` = replace(`Data Value`, which(`Data Value`<=3), 0))
 #tasks <- tasks %>% mutate(`Data Value` = replace(`Data Value`, which(`Data Value`>3), 1))
 #tasks <- tasks %>% mutate(`Data Value` = replace(`Data Value`, which(`Data Value`<=2.5), 0))
@@ -36,8 +30,7 @@ tasks_wide <- tasks %>% spread(`Element Name`,`Data Value`)
 
 Total <- 968
 # Number of variables
-# no knoweldge = 128
-J <- 161
+J <- 128
 # we only have one replicate for each of the variables
 Rj <- rep(1, J)
 # Nijr indicates the number of ranking levels for each variable.
@@ -48,7 +41,7 @@ K <- 10
 # There are 3 choices for each of the variables ranging from 0 to 2.
 Vj <- rep(4, J)
 # we initialize alpha to .2
-alpha <- rep(1.5, K)
+alpha <- rep(.2, K)
 # All variables are multinomial
 dist <- rep("multinomial", J)
 # obs are the observed responses. it is a 4-d array indexed by i,j,r,n
