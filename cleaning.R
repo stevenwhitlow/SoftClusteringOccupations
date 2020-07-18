@@ -6,7 +6,6 @@ library(readstata13)
 library(survey)
 library(srvyr)
 setwd("/Users/steven/Documents/School/Second Year/950/paper/")
-string.as.variable.name <- function(var) {eval(parse(text = var))}
 
 ##
 ## DWS 02,04,06,08,10
@@ -67,7 +66,7 @@ for (num_group in 1:7){
   displaced %>% 
     mutate(euclid = euclid + sqrt(((eval(parse(text = var_new))) - (eval(parse(text = var_old))))^2)) -> displaced
   displaced %>%
-    displaced %>% mutate(euclid := euclid + sqrt((string.as.variable.name(var_new) - string.as.variable.name(var_old))^2)) -> displaced
+    mutate(hellinger = hellinger + (sqrt( eval(parse(text = var_new)) ) - sqrt( eval(parse(text = var_old)) ) )^2 )  -> displaced
 }
 displaced %>%
   mutate(hellinger = (1/sqrt(2))*sqrt(hellinger)) -> displaced
