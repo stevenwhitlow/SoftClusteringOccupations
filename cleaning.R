@@ -173,4 +173,29 @@ displaced <- displaced %>% mutate(downward_lss = downward_tasks_hourly*(change_t
 
 displaced <- displaced %>% filter(mode_current!="NA" & mode_former!="NA")
 
-######
+##
+## Census 2000
+##
+
+census <- read.dta13("usa_00032.dta") 
+census %>% filter((wkswork1>35 & as.integer(uhrswork)>35)) -> census
+census %>% mutate(lnhrwage = log(incwage/(wkswork1*as.integer(uhrswork)))) -> census
+census %>% filter(!(incwage==0)) -> census
+crosswalk <- read.dta13("/Users/steven/Downloads/Data_and_code/Data/cens00_soc_xwalk_sanders.dta")
+crosswalk <- right_join(classifications,crosswalk, by = (c("O.NET.SOC.Code"="onetsoccode")))
+crosswalk <- subset(crosswalk, select = -c(title))
+census <- left_join(census,crosswalk, by = (c("occ"="occ00")))
+
+census %>% mutate(modal_group = case_when(
+  freq1 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 1,
+  freq2 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 2,
+  freq3 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 3,
+  freq4 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 4,
+  freq5 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 5,
+  freq6 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 6,
+  freq7 == pmax(freq1, freq2, freq3, freq4, freq5, freq6, freq7) ~ 7,
+)) -> census
+
+census_baseline <- lm(lnhrwage ~ as.factor(occ), na.action = na.omit, data=census)
+coeftest(census_baseline, vcov = vcovHC(census_baseline, type = 'HC1'))
+summary(census_baseline)
