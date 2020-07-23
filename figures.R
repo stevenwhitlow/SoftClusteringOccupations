@@ -79,6 +79,7 @@ ggsave("./figures/switching_post_displacement.pdf", width = 11, height = 8.5, un
 
 
 #####
+##WARNING BREAKS GGPLOT.
 library(ggtern)
 
 svy_census <- as_survey(census, probs = perwt, nest = TRUE)
@@ -129,6 +130,14 @@ classifications_simplex %>% select(freq1_r, freq2_r, freq3_r, percent_workforce,
   #                          as.character(Title),'')),hjust=0,vjust=0, size=3) +
   theme(text=element_text(size=16, family="Palatino"), legend.position = "right")
 ggsave("./figures/simplex_rounded.pdf", width = 11, height = 8.5, units = "in")
+
+#Fixes ggplot.
+library(devtools)
+devtools::unload("ggtern")
+
+R.methodsS3::setMethodS3("print", "ggplot", ggplot2:::print.ggplot)
+R.methodsS3::setMethodS3("plot", "ggplot", ggplot2:::plot.ggplot)
+R.methodsS3::setMethodS3("grid.draw", "ggplot", ggplot2:::grid.draw.ggplot)
 
 # ggtern(data=classifications_simplex,aes(freq1_r,freq23_r,freq4_r,value=lnhrwage)) + 
 #   geom_mask() +
