@@ -67,8 +67,9 @@ ggplot(inner_join(sankey_data,mode_and_wage_changes),
            y = total)) +
   geom_alluvium(aes(fill = change_wage)) +
   geom_stratum(alpha = 0.1) +
-  geom_text(stat = "stratum", 
-            label.strata = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) + 
+  #geom_text(stat = "stratum", 
+  #          label.strata = TRUE) +
   scale_x_discrete(limits = c("Pre-displacement \n primary type", "Post-displacement \n primary type"),
                    expand = c(-0.3, 0.3)) +
   guides(fill = guide_legend(title=unname(TeX("$\\Delta w$")))) +
