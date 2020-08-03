@@ -88,7 +88,7 @@
   #mtext("Between Conservatives and Liberals")
   
   #colnames(tasks_wide %>% select(-c(1,2)))[order(out$theta[,1,3], decreasing = T)][1:3]
-  
+  out <- permuteLabels(out, c(6, 2, 4, 5, 1, 3, 7))
   lambda.point <- out$phi / rowSums(out$phi)
   lambda <- as.data.frame.table(lambda.point)
   lambda <- rename(lambda, occnumber=Var1)
