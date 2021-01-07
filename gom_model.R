@@ -1,6 +1,6 @@
 library(tidyverse)
 
-# setwd("/Users/steven/Documents/School/Second Year/950/paper/")
+setwd("/Users/steven/Documents/research/occupations/")
 source("gom_estimation.R")
 
 clean_for_gom()

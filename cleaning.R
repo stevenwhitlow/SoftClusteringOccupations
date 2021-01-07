@@ -5,7 +5,7 @@ library(sandwich)
 library(readstata13)
 library(survey)
 library(srvyr)
-setwd("/Users/steven/Documents/School/Second Year/950/paper/")
+setwd("/Users/steven/Documents/research/occupations/")
 
 ##
 ## DWS 02,04,06,08,10

@@ -1,7 +1,9 @@
+cd /Users/steven/Documents/research/occupations
+
 /*
 Plot the estimated minimum and maximum degrees of membership
 */
-import delimited "/Users/steven/Documents/School/Second Year/950/paper/classifications.csv", encoding(ISO-8859-1) clear
+import delimited "classifications.csv", encoding(ISO-8859-1) clear
 global plist group_freqs "freq1 freq2 freq3 freq4 freq5 freq6 freq7"
 egen mode = rowmax(`group_freqs')
 egen rank = rank(mode)
@@ -17,7 +19,7 @@ twoway line least rank_least
 Decomposition of occupational mean wages and rankings of occupations by wage
 */
 
-use ~/Downloads/usa_00032.dta, clear
+use ./data/us_census_data_2000.dta, clear
 rename occ occ00
 drop if wkswork1 < 35
 drop if uhrswork <35

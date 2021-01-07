@@ -32,7 +32,7 @@ clean_for_gom <- function() {
     gom_data <<- tasks_wide %>% select(-c(1:2))
 }
 
-estimate_gom <- function(data, total, J, K, initial_alpha, initial_theta, seed, permutation = FALSE, returnELBO = FALSE) {
+estimate_gom <- function(data, total, J, K, initial_alpha, initial_theta, seed, permutation = NULL, returnELBO = FALSE) {
     library(mixedMem)
     library(gtools)
 
@@ -49,7 +49,6 @@ estimate_gom <- function(data, total, J, K, initial_alpha, initial_theta, seed, 
     obs <- array(0, dim = c(total, J, max(Rj), max(Nijr)))
     data %>% as.matrix -> obs[, , 1, 1]
 
-
     # Each variable is multinomial
     dist <- rep("multinomial", J)
 
@@ -62,15 +61,15 @@ estimate_gom <- function(data, total, J, K, initial_alpha, initial_theta, seed, 
         theta[j, , ] <- rdirichlet(K, rep(initial_theta, Vj[j]))
     }
 
-    #
+    # Create model object using model parameters and data
     model_starting_values <- mixedMemModelVarInf(Total = total, J = J, Rj = Rj,
                                                  Nijr = Nijr, K = K, Vj = Vj, alpha = alpha,
                                                  theta = theta, dist = dist, obs = obs)
     computeELBO(model_starting_values)
     output_model <- mmVarInfFit(model_starting_values, printStatus = 1, printMod = 10)
     computeELBO(output_model)
-    if(isTRUE(permutation)) {
-        output_model <- permuteLabels(permutation)
+    if(!missing(permutation)) {
+        output_model <- permuteLabels(output_model, permutation)
     }
 
     if(isTRUE(returnELBO)) {
@@ -94,6 +93,7 @@ fit_gom <- function(data, total, J, K, alpha, theta) {
 
     dist <- rep("multinomial", J)
 
+    # Create model object using model parameters and data
     model_starting_values <- mixedMemModelVarInf(Total = total, J = J, Rj = Rj,
                                    Nijr = Nijr, K = K, Vj = Vj, alpha = alpha,
                                    theta = theta, dist = dist, obs = obs)
