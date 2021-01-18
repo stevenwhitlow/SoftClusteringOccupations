@@ -11,11 +11,11 @@ setwd("/Users/steven/Documents/research/occupations/")
 ## DWS 02,04,06,08,10
 ##
 
-crosswalk <- read.dta13("/Users/steven/Downloads/Data_and_code/Data/cens00_soc_xwalk_sanders.dta")
-classifications <- read.csv("classifications.csv")
+crosswalk <- read.dta13("./data/cens00_soc_xwalk_sanders.dta")
+classifications <- read.csv("./model_output/classifications.csv")
 crosswalk <- full_join(classifications,crosswalk, by = (c("O.NET.SOC.Code"="onetsoccode")))
 crosswalk <- subset(crosswalk, select = -c(title))
-displaced <- read.dta13("displaced.dta") 
+displaced <- read.dta13("./data/displaced.dta") 
 ranks <- read.dta13("ranks.dta") 
 displaced %>% 
   filter(!(occ==0) & dwwagec!=0 & dwwagel!=0 & dwweekc!=0 & dwweekl!=0) %>% 
@@ -99,7 +99,7 @@ displaced %>% mutate(changed_mode = case_when(
 #Generate change in wages 
 
 #Read in CPI data
-cpi <- read.csv("CPIAUCSL.csv")
+cpi <- read.csv("./data/CPIAUCSL.csv")
 require(lubridate)
 cpi <- cpi %>%
   mutate(DATE = as.Date(DATE)) %>%
@@ -177,11 +177,11 @@ displaced <- displaced %>% filter(mode_current!="NA" & mode_former!="NA")
 ## Census 2000
 ##
 
-census <- read.dta13("usa_00032.dta") 
+census <- read.dta13("./data/us_census_data_2000.dta")
 census %>% filter((wkswork1>35 & as.integer(uhrswork)>35)) -> census
 census %>% mutate(lnhrwage = log(incwage/(wkswork1*as.integer(uhrswork)))) -> census
 census %>% filter(!(incwage==0)) -> census
-crosswalk <- read.dta13("/Users/steven/Downloads/Data_and_code/Data/cens00_soc_xwalk_sanders.dta")
+crosswalk <- read.dta13("./data/cens00_soc_xwalk_sanders.dta")
 crosswalk <- right_join(classifications,crosswalk, by = (c("O.NET.SOC.Code"="onetsoccode")))
 crosswalk <- subset(crosswalk, select = -c(title))
 census <- left_join(census,crosswalk, by = (c("occ"="occ00")))

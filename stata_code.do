@@ -3,7 +3,7 @@ cd /Users/steven/Documents/research/occupations
 /*
 Plot the estimated minimum and maximum degrees of membership
 */
-import delimited "classifications.csv", encoding(ISO-8859-1) clear
+import delimited "./model_output/classifications.csv", encoding(ISO-8859-1) clear
 global plist group_freqs "freq1 freq2 freq3 freq4 freq5 freq6 freq7"
 egen mode = rowmax(`group_freqs')
 egen rank = rank(mode)

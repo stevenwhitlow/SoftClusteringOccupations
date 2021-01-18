@@ -54,9 +54,9 @@ elbo_df <- melt(data = elbo_test, varnames=c("NumTypes","Seed", "InitializationT
     filter(NumTypes!=1) %>%
     mutate(meanInitial = mean(ELBO))
 
-write.csv(elbo_df, "elbo_kfold_initializations.csv")
+write.csv(elbo_df, "./model_output/elbo_kfold_initializations.csv")
 
 elbo_df %>% group_by(NumTypes) %>%
     slice_max(order_by = meanInitial, n=1, with_ties= FALSE) %>%
     select(NumTypes, InitializationTheta, InitializationAlpha, Seed, meanInitial) %>%
-    write.csv("elbo_kfold_best_initializations.csv")
+    write.csv("./model_output/elbo_kfold_best_initializations.csv")
