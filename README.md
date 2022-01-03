@@ -1,5 +1,4 @@
-# Soft clustering of occupations
-Soft categorization of occupations using on-the-job task data
+# Soft categorization of occupations using on-the-job task data
 
 A summary of this project is available [on my website](https://www.whitlow.ca/projects/grade-of-membership-occupations/), including a live demonstration of the estimated group memberships for each occupation. 
 
